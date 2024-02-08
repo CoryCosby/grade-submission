@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 // import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -20,8 +21,8 @@ public class GradeController {
     List<Grade> studentGrades = new ArrayList<>();
     
         @GetMapping("/")
-        public String gradeForm(Model model) {
-            model.addAttribute("grade", new Grade());
+        public String gradeForm(Model model, @RequestParam(required = false) String name) {
+            model.addAttribute("grade", getGradeIndex(name) == -1000 ? new Grade() : studentGrades.get(getGradeIndex(name)));
             return "form";
         }
         
@@ -34,8 +35,21 @@ public class GradeController {
 
     @PostMapping("/handleSubmit")
     public String submitForm(Grade grade) {
-        studentGrades.add(grade);
+        int index = getGradeIndex(grade.getName());
+        if (index == -1000) {
+            studentGrades.add(grade);
+        } else {
+            studentGrades.set(index, grade);
+        }
+        
         return "redirect:/grades";
+    }
+
+    public Integer getGradeIndex(String name) {
+        for (int i = 0; i < studentGrades.size(); i++) {
+            if (studentGrades.get(i).getName().equals(name)) return i; 
+        }
+        return -1000;
     }
     
 }

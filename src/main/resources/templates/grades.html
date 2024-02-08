@@ -19,9 +19,10 @@
           <th>Score</th>
         </tr>
         <tr th:each="grade : ${grades}">
-          <td th:text="${grade.name}">Harry</td>
-          <td th:text="${grade.subject}">Potions</td>
-          <td th:text="${grade.score}">C-</td>
+          <td th:text="${grade.name}"></td>
+          <td th:text="${grade.subject}"></td>
+          <td th:text="${grade.score}"></td>
+          <td><a role="button" class="update" th:href="@{/(name = ${grade.name})}">Update</a></td>
         </tr>
       </table>
     </div>
